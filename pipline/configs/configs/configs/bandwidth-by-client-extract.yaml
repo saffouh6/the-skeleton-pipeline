@@ -1,0 +1,15 @@
+pipeline:
+  name: bandwidth-extract
+  source:
+    type: file
+    params: { path: data/access-small.log }
+  stages:
+    - type: parse
+      params: { format: clf }
+    - type: filter
+      params: { field: method, op: "equals", value: "GET" }
+    - type: project
+      params: { fields: [clientIp, bytes, path] }
+  sink:
+    type: file
+    params: { path: output-bandwidth.log }

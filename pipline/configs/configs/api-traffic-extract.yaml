@@ -1,0 +1,15 @@
+pipeline:
+  name: api-traffic-extract
+  source:
+    type: file
+    params: { path: data/access-small.log }
+  stages:
+    - type: parse
+      params: { format: clf }
+    - type: filter
+      params: { field: path, op: "prefix", value: "/api" }
+    - type: project
+      params: { fields: [timestamp, method, path, status] }
+  sink:
+    type: file
+    params: { path: output-api.log }
